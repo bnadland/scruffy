@@ -46,7 +46,17 @@ sub add_issue {
 
 # parameter: issue_id
 # returns: arrayref
-sub get_issue {...}
+sub get_issue {
+	my $issue_id = shift;
+	unless ($issue_id) {
+		croak('You need to pass the issue_id as parameter.');
+		return;
+	};
+
+	my $redis = db();
+
+	return $redis->hgetall("issue:$issue_id");
+};
 
 # parameter: issue_id
 sub change_priority {...}
