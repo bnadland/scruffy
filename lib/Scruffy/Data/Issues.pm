@@ -125,8 +125,11 @@ sub change_state {
 	
 	my $redis = db();
 
+	my $old_state = $redis->hget("issue:$issue_id", "state");
 	$redis->hset("issue:$issue_id", "state", "$state");
-	history("$issue_id", "changed state to $state");
+	$redis->lrem("$old_state", "0", "$issue_id");
+	$redis->rpush("$state", "$issue_id");
+	history("$issue_id", "changed state from $old_state to $state");
 };
 
 # parameter: none
