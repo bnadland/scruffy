@@ -37,10 +37,12 @@ sub add_issue {
 		return;
 	}
 
+	my $priority = shift || "normal";
+
 	my $redis = db();	
 	
 	my $id = $redis->incr("issues_id");
-  $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by);
+  $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority);
   $redis->rpush("backlog", "issue:" . $id);
 };
 

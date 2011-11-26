@@ -8,6 +8,9 @@ Scruffy::Data::Issues::db()->flushdb();
 # add an issue to the database
 ok(add_issue("foo", "bar"));
 
+# add an issue with prioriy
+ok(add_issue("foo", "bar", "priority"));
+
 # check if the backlog contains one item
 ok(get_backlog());
 
