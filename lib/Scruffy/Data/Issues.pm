@@ -45,7 +45,7 @@ sub add_issue {
 };
 
 # parameter: issue_id
-# returns: arrayref
+# returns: hashref
 sub get_issue {
 	my $issue_id = shift;
 	unless ($issue_id) {
@@ -54,8 +54,10 @@ sub get_issue {
 	};
 
 	my $redis = db();
-
-	return $redis->hgetall("issue:$issue_id");
+	
+	my $result = $redis->hgetall("issue:$issue_id");
+	my %result = @$result;
+	return \%result;
 };
 
 # parameter: issue_id
@@ -76,6 +78,8 @@ sub get_progress  {...}
 sub get_waiting   {...}
 sub get_completed {...}
 
+__END__;
+
 =head1 NAME
 
 Scruffy::Data::Issues - The database backend code for Scruffy
@@ -94,25 +98,25 @@ This is an interface to all the issues and fields on your Scruffy board.
 
 The following subroutines are exported by default:
 
-=head3 add_issue
+=head3 add_issue()
 
-=head3 get_issue
+=head3 get_issue()
 
-=head3 change_priority
+=head3 change_priority()
 
-=head3 assign_issue
+=head3 assign_issue()
 
-=head3 wait
+=head3 wait()
 
-=head3 complete
+=head3 complete()
 
-=head3 get_backlog
+=head3 get_backlog()
 
-=head3 get_progress
+=head3 get_progress()
 
-=head3 get_waiting
+=head3 get_waiting()
 
-=head3 get_completed
+=head3 get_completed()
 
 =head1 AUTHOR
 
@@ -133,7 +137,3 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-=cut
-
-1;

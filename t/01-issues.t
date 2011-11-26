@@ -11,14 +11,14 @@ ok(add_issue("foo", "bar"));
 # check if the backlog contains one item
 ok(get_backlog());
 
-# get arrayref of issue 1
+# get hashref of issue 1
 my $issue = get_issue("1");
 ok($issue); 
 
 # check description
-is($issue->[1], "foo");
+is($issue->{"description"}, "foo");
 
 # check created_by
-is($issue->[3], "bar");
+is($issue->{"created_by"}, "bar");
 
 done_testing();
