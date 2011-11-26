@@ -14,17 +14,23 @@ ok(add_issue("foo", "bar", "priority"));
 # check if the backlog contains one item
 ok(get_backlog());
 
-# get hashref of issue 1
-my $issue = get_issue("1");
-ok($issue); 
+subtest 'get_issue 1' => sub {
+	# get hashref of issue 1
+	my $issue = get_issue("1");
+	ok($issue); 
 
-# check description
-is($issue->{"description"}, "foo");
+	# check description
+	is($issue->{"description"}, "foo");
 
-# check created_by
-is($issue->{"created_by"}, "bar");
+	# check created_by
+	is($issue->{"created_by"}, "bar");
+};
 
 # change priority of issue 1 to "expedite"
-ok(change_priority("1", "expedite"));
+subtest 'change priority of issue 1 to "expedite"' => sub {
+	ok(change_priority("1", "expedite"));
+	my $issue = get_issue("1");
+	is($issue->{"priority"}, "expedite");
+};
 
 done_testing();
