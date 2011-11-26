@@ -45,7 +45,7 @@ sub add_issue {
 };
 
 # parameter: issue_id
-# returns: hashref
+# returns: arrayref
 sub get_issue {...}
 
 # parameter: issue_id
