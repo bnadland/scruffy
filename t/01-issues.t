@@ -6,6 +6,7 @@ use Scruffy::Data::Issues;
 Scruffy::Data::Issues::db()->flushdb();
 
 my $issue;
+my $history;
 
 # add an issue to the database
 ok(add_issue("foo", "bar"));
@@ -30,5 +31,12 @@ is($issue->{"created_by"}, "bar");
 change_priority("1", "expedite");
 $issue = get_issue("1");
 is($issue->{"priority"}, "expedite");
+
+# check history of issue 1
+$history = get_history("1");
+ok($history);
+
+# check entry into backlog
+like($history->[0], qr/backlog/);
 
 done_testing();

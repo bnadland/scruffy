@@ -7,7 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use base 'Exporter';
-our @EXPORT = qw( add_issue get_issue change_priority assign_issue wait complete get_backlog get_progress get_waiting get_completed);
+our @EXPORT = qw( add_issue get_issue get_history change_priority assign_issue wait complete get_backlog get_progress get_waiting get_completed);
 
 use Carp 'croak';
 
@@ -62,6 +62,10 @@ sub get_issue {
 	return \%result;
 };
 
+# parameter: issue_id
+# returns: list_of timestamped lines
+sub get_history {...};
+
 # parameter: issue_id, priority
 sub change_priority {
 	my ($issue_id, $priority) = @_;
@@ -114,6 +118,8 @@ The following subroutines are exported by default:
 =head3 add_issue()
 
 =head3 get_issue()
+
+=head3 get_history()
 
 =head3 change_priority()
 
