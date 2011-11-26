@@ -24,4 +24,7 @@ is($issue->{"description"}, "foo");
 # check created_by
 is($issue->{"created_by"}, "bar");
 
+# change priority of issue 1 to "expedite"
+ok(change_priority("1", "expedite"));
+
 done_testing();
