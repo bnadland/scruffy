@@ -15,7 +15,7 @@ use Redis;
 
 # returns: redis connection
 # not exported
-sub connect {
+sub db {
 	my $redis = Redis->new(encoding => undef);
 	unless ($redis) {
 		croak('Cannot connect to redis.');
@@ -37,7 +37,7 @@ sub add_issue {
 		return;
 	}
 
-	my $redis = connect();	
+	my $redis = db();	
 	
 	my $id = $redis->incr("issues_id");
   $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by);
