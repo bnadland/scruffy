@@ -55,8 +55,13 @@ sub wait            {...}
 sub complete        {...}
 
 # parameter: none
+# optional: number of issues
 # returns: list_of issue_ids
-sub get_backlog   {...}
+sub get_backlog   {
+	my $number_of_issues = shift || 100;
+	my $redis = db();
+	return $redis->lrange("backlog", "0", "$number_of_issues");
+};
 sub get_progress  {...}
 sub get_waiting   {...}
 sub get_completed {...}
