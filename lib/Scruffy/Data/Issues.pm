@@ -49,7 +49,7 @@ sub add_issue {
 # parameter: issue_id
 # returns: hashref
 sub get_issue {
-	my $issue_id = shift;
+	my ($issue_id) = @_;
 	unless ($issue_id) {
 		croak('You need to pass the issue_id as parameter.');
 		return;
@@ -62,8 +62,18 @@ sub get_issue {
 	return \%result;
 };
 
-# parameter: issue_id
-sub change_priority {...}
+# parameter: issue_id, priority
+sub change_priority {
+	my ($issue_id, $priority) = @_;
+	unless ($issue_id) {
+		croak('You need to pass the issue_id as parameter.');
+		return;
+	}
+
+	my $redis = db();
+
+	$redis->hset("issue:$issue_id", "priority", "$priority");
+}
 sub assign_issue    {...}
 sub wait            {...}
 sub complete        {...}
@@ -72,7 +82,8 @@ sub complete        {...}
 # optional: number of issues
 # returns: list_of issue_ids
 sub get_backlog   {
-	my $number_of_issues = shift || 100;
+	my ($number_of_issues) = @_;
+	$number_of_issues ||= 100;
 	my $redis = db();
 	return $redis->lrange("backlog", "0", "$number_of_issues");
 };
