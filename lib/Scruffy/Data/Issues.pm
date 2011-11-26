@@ -27,7 +27,7 @@ sub db {
 # parameter: description, created_by
 # optional: priority
 sub add_issue {
-	my ($description, $created_by) = @_;
+	my ($description, $created_by, $priority) = @_;
 	unless ($description ) {
 		croak('You need to pass a description of the issue.');
 		return;
@@ -37,7 +37,7 @@ sub add_issue {
 		return;
 	}
 
-	my $priority = shift || "normal";
+	$priority ||= "normal";
 
 	my $redis = db();	
 	
