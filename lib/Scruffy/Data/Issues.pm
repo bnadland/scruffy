@@ -135,13 +135,16 @@ sub change_state {
 };
 
 # parameter: none
-# optional: number of issues
 # returns: list_of issue_ids
 sub get_backlog   {
-	my ($number_of_issues) = @_;
-	$number_of_issues ||= 100;
 	my $redis = db();
-	return $redis->lrange("backlog", "0", "$number_of_issues");
+	my $backlog = ();
+	foreach my $queue ($redis->keys("backlog:*")) {
+		my $len  = $redis->llen("$queue");
+		my $temp = $redis->lrange("$queue", "0", "$len");
+		push(@$backlog, @$temp);
+	}
+	return $backlog;
 };
 sub get_progress  {...}
 sub get_waiting   {...}
