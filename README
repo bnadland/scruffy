@@ -4,13 +4,17 @@ Scruffy - ticketsystem/kanbanboard for sysadmins
 WARNING!
 --------
 
-Running tests might erase your database!
+Running tests will erase your database!
 
 Only run this application if you want to be involved
 in the development process.
 
 Startup
 -------
+
+Create the data directory if it does not exist:
+
+	$ mkdir data
 
 Start the redis-server:
 
