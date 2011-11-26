@@ -39,4 +39,19 @@ ok($history);
 # check history of entry into backlog
 like($history->[0], qr/backlog/);
 
+# assign issue 1
+change_state("1", "progress");
+$issue = get_issue("1");
+is($issue->{"state"}, "progress");
+
+# wait issue 1
+change_state("1", "waiting");
+$issue = get_issue("1");
+is($issue->{"state"}, "waiting");
+
+# complete issue 1
+change_state("1", "completed");
+$issue = get_issue("1");
+is($issue->{"state"}, "completed");
+
 done_testing();

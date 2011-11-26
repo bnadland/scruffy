@@ -7,9 +7,9 @@ use warnings;
 our $VERSION = '0.01';
 
 use base 'Exporter';
-our @EXPORT = qw( add_issue get_issue get_history change_priority assign_issue wait complete get_backlog get_progress get_waiting get_completed);
+our @EXPORT = qw( add_issue get_issue get_history change_priority change_state get_backlog );
 
-use Carp 'croak';
+use Carp qw(croak carp);
 use POSIX;
 use Redis;
 
@@ -61,7 +61,7 @@ sub add_issue {
 	my $redis = db();	
 	
 	my $id = $redis->incr("issues_id");
-  $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority);
+  $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority, "state", "backlog");
   $redis->rpush("backlog", "$id");
 	history("$id", "added to backlog with $priority");
 };
@@ -109,9 +109,25 @@ sub change_priority {
 	$redis->hset("issue:$issue_id", "priority", "$priority");
 	history("$issue_id", "changed priority to $priority");
 }
-sub assign_issue    {...}
-sub wait            {...}
-sub complete        {...}
+
+# parameter: issue_id, state
+sub change_state {
+	my ($issue_id, $state) = @_;
+	unless ($issue_id ) {
+		croak('You need to pass the issue_id as parameter.');
+    return;
+  }
+
+	unless ($state) {
+		croak('You need to pass the state as second parameter.');
+		return;
+	}
+	
+	my $redis = db();
+
+	$redis->hset("issue:$issue_id", "state", "$state");
+	history("$issue_id", "changed state to $state");
+};
 
 # parameter: none
 # optional: number of issues
@@ -141,32 +157,6 @@ Scruffy::Data::Issues - The database backend code for Scruffy
 =head1 DESCRIPTION
 
 This is an interface to all the issues and fields on your Scruffy board.
-
-=head2 Subroutines
-
-The following subroutines are exported by default:
-
-=head3 add_issue()
-
-=head3 get_issue()
-
-=head3 get_history()
-
-=head3 change_priority()
-
-=head3 assign_issue()
-
-=head3 wait()
-
-=head3 complete()
-
-=head3 get_backlog()
-
-=head3 get_progress()
-
-=head3 get_waiting()
-
-=head3 get_completed()
 
 =head1 AUTHOR
 
