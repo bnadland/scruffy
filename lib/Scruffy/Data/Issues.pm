@@ -13,6 +13,17 @@ use Carp 'croak';
 
 use Redis;
 
+# returns: redis connection
+# not exported
+sub connect {
+	my $redis = Redis->new(encoding => undef);
+	unless ($redis) {
+		croak('Cannot connect to redis.');
+		return;
+	}
+	return $redis;
+};
+
 # parameter: description, created_by
 # optional: priority
 sub add_issue {
@@ -26,11 +37,7 @@ sub add_issue {
 		return;
 	}
 
-	my $redis = Redis->new(encoding => undef);
-	unless ($redis) {
-		croak('Cannot connect to redis.');
-		return;
-	}
+	my $redis = connect();	
 	
 	my $id = $redis->incr("issues_id");
   $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by);
