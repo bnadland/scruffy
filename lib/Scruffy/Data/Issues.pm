@@ -62,7 +62,7 @@ sub add_issue {
 	
 	my $id = $redis->incr("issues_id");
   $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority, "state", "backlog");
-  $redis->rpush("backlog", "$id");
+  $redis->rpush("backlog:$priority", "$id");
 	history("$id", "added to backlog with $priority");
 };
 
@@ -125,10 +125,12 @@ sub change_state {
 	
 	my $redis = db();
 
+	my $priority  = $redis->hget("issue:$issue_id", "priority");
 	my $old_state = $redis->hget("issue:$issue_id", "state");
+	
 	$redis->hset("issue:$issue_id", "state", "$state");
 	$redis->lrem("$old_state", "0", "$issue_id");
-	$redis->rpush("$state", "$issue_id");
+	$redis->rpush("$state:$priority", "$issue_id");
 	history("$issue_id", "changed state from $old_state to $state");
 };
 
