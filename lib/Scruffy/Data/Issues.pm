@@ -9,7 +9,7 @@ our $VERSION = '0.01';
 use base 'Exporter';
 our @EXPORT = qw( add_issue get_issue get_history change_priority change_state get_backlog );
 
-use Carp qw(croak carp);
+use Carp qw(croak);
 use POSIX;
 use Redis;
 
