@@ -6,8 +6,17 @@ use Scruffy::Data::Issues;
 Scruffy::Data::Issues::db()->flushdb();
 
 # add an issue to the database
-ok(add_issue("it isn't working", "foo@bar.com"));
-# check if the backlog contains at least one item
+ok(add_issue("foo", "bar"));
+
+# check if the backlog contains one item
 ok(get_backlog());
+
+# get hashref of issue 1
+my $issue = get_issue("1");
+ok($issue); 
+
+# check description
+
+# check created_by
 
 done_testing();
