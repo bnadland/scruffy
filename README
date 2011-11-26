@@ -1,0 +1,45 @@
+Scruffy - ticketsystem/kanbanboard for sysadmins 
+================================================
+
+WARNING!
+--------
+
+Running tests might erase your database!
+
+Only run this application if you want to be involved
+in the development process.
+
+Startup
+-------
+
+Start the redis-server:
+
+	$ redis-server conf/redis.conf
+
+Start the development server:
+
+	$ morbo script/scruffy
+
+Dependencies
+------------
+
+* Mojolicious ( github.com/kraih/mojo )
+* perl-redis ( github.com/melo/perl-redis )
+* redis-server ( github.com/antirez/redis )
+
+License
+-------
+
+Copyright (c) 2011 Benjamin Nadland <benjamin.nadland@freenet.de>
+
+Permission to use, copy, modify, and distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
