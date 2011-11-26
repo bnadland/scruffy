@@ -9,11 +9,33 @@ our $VERSION = '0.01';
 use base 'Exporter';
 our @EXPORT = qw( add_issue get_issue change_priority assign_issue wait complete get_backlog get_progress get_waiting get_completed);
 
+use Carp 'croak';
+
 use Redis;
 
 # parameter: description, created_by
 # optional: priority
-sub add_issue {...}
+sub add_issue {
+	my ($description, $created_by) = @_;
+	unless ($description ) {
+		croak('You need to pass a description of the issue.');
+		return;
+	}
+	unless ($created_by) {
+		croak('You need to pass the creator of the issue as second parameter.');
+		return;
+	}
+
+	my $redis = Redis->new(encoding => undef);
+	unless ($redis) {
+		croak('Cannot connect to redis.');
+		return;
+	}
+	
+	my $id = $redis->incr("issues_id");
+  $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by);
+  $redis->rpush("backlog", "issue:" . $id);
+};
 
 # parameter: issue_id
 # returns: hashref

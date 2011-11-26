@@ -1,5 +1,6 @@
 use Test::More;
 use Scruffy::Data::Issues;
 
-add_issue("description", "foo@bar.com");
+ok(add_issue("it isn't working", "foo@bar.com"));
+
 done_testing();
