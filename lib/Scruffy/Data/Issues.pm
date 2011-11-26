@@ -10,8 +10,27 @@ use base 'Exporter';
 our @EXPORT = qw( add_issue get_issue get_history change_priority assign_issue wait complete get_backlog get_progress get_waiting get_completed);
 
 use Carp 'croak';
-
+use POSIX;
 use Redis;
+
+# parameter: issue_id, line_of history
+# not exported
+sub history {
+	my ($issue_id, $history) = @_;
+	unless ($issue_id) {
+		croak('You need to pass the issue_id as a parameter.');
+		return;
+	}
+
+	unless ($history) {
+		croak('You need to pass the string you want to add to the history as second parameter.');
+		return;
+	}
+
+	my $redis = db();
+
+	$redis->rpush("history:$issue_id", POSIX::strftime("%Y-%m-%d %H:%M", localtime)." ".$history);
+};
 
 # returns: redis connection
 # not exported
@@ -43,7 +62,8 @@ sub add_issue {
 	
 	my $id = $redis->incr("issues_id");
   $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority);
-  $redis->rpush("backlog", "issue:" . $id);
+  $redis->rpush("backlog", "$id");
+	history("$id", "added to backlog with $priority");
 };
 
 # parameter: issue_id
@@ -63,8 +83,18 @@ sub get_issue {
 };
 
 # parameter: issue_id
-# returns: list_of timestamped lines
-sub get_history {...};
+# returns: list_of timestamped lines (maximum 1000 lines)
+sub get_history {
+	my ($issue_id) = @_;
+	unless ($issue_id) {
+		croak('You need to pass the issue_id as parameter.');
+		return;
+	}
+	
+	my $redis = db();
+
+	return $redis->lrange("history:$issue_id", "0", "1000");
+};
 
 # parameter: issue_id, priority
 sub change_priority {
@@ -77,6 +107,7 @@ sub change_priority {
 	my $redis = db();
 
 	$redis->hset("issue:$issue_id", "priority", "$priority");
+	history("$issue_id", "changed priority to $priority");
 }
 sub assign_issue    {...}
 sub wait            {...}

@@ -36,7 +36,7 @@ is($issue->{"priority"}, "expedite");
 $history = get_history("1");
 ok($history);
 
-# check entry into backlog
+# check history of entry into backlog
 like($history->[0], qr/backlog/);
 
 done_testing();
