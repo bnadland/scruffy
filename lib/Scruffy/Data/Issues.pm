@@ -7,7 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use base 'Exporter';
-our @EXPORT = qw( add_issue get_issue get_history change_priority change_state get_backlog );
+our @EXPORT = qw( add_issue get_issue get_history change_priority change_state get_backlog get_progress);
 
 use Carp qw(croak);
 use POSIX;
@@ -146,7 +146,17 @@ sub get_backlog   {
 	}
 	return $backlog;
 };
-sub get_progress  {...}
+
+sub get_progress {
+	my $redis = db();
+	my $progress = ();
+	foreach my $queue ($redis->keys("progress:*")) {
+		my $len  = $redis->llen("$queue");
+		my $temp = $redis->lrange("$queue", "0", "$len");
+		push(@$progress, @$temp);
+	};
+	return $progress;
+};
 sub get_waiting   {...}
 sub get_completed {...}
 

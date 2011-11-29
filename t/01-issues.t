@@ -44,6 +44,9 @@ change_state("1", "progress");
 $issue = get_issue("1");
 is($issue->{"state"}, "progress");
 
+# check if progress contains one issue
+ok(get_progress());
+
 # wait issue 1
 change_state("1", "waiting");
 $issue = get_issue("1");
