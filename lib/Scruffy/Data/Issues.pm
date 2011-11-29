@@ -196,6 +196,15 @@ Scruffy::Data::Issues - The database backend code for Scruffy
 
 This is an interface to all the issues and fields on your Scruffy board.
 
+The basic workflow looks like this:
+
+  * A new issue gets added to the backlog via add_issue("description", "created_by")
+  * It gets assigned via assign_to("issue_id", teammember")
+  * You can then wait until a blocker gets out of the way with wait_for("issue_id", "reason")
+  * or complete the issue with complete("issue_id")
+  * You can use get_backlog(), get_progress(), get_waiting() and get_completed() at any time
+    to get a list of all issues in that state
+
 =head1 AUTHOR
 
 Benjamin Nadland <benjamin.nadland@freenet.de>
