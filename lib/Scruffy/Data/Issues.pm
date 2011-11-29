@@ -7,7 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use base 'Exporter';
-our @EXPORT = qw( add_issue get_issue get_history change_priority change_state get_backlog get_progress get_waiting get_completed);
+our @EXPORT = qw( add_issue get_issue get_history change_priority assign_to wait_on complete get_backlog get_progress get_waiting get_completed);
 
 use Carp qw(croak);
 use POSIX;
@@ -132,6 +132,31 @@ sub change_state {
 	$redis->lrem("$old_state", "0", "$issue_id");
 	$redis->rpush("$state:$priority", "$issue_id");
 	history("$issue_id", "changed state from $old_state to $state");
+};
+
+sub assign_to {
+	my ($issue_id, $assigned) = @_;
+	my $redis = db();
+
+	$redis->hset("issue:$issue_id", "assigned", "$assigned");
+	change_state("$issue_id", "progress");
+	history("$issue_id", "assigned issue to $assigned");
+};
+
+sub wait_on {
+	my ($issue_id, $reason) = @_;
+	my $redis = db();
+
+	change_state("$issue_id", "waiting");
+	history("$issue_id", "waiting for: $reason");
+};
+
+sub complete {
+	my ($issue_id) = @_;
+	my $redis = db();
+
+	change_state("$issue_id", "completed");
+	history("$issue_id", "completed");
 };
 
 # parameter: none

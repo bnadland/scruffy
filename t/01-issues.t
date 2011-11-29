@@ -46,7 +46,7 @@ ok($history);
 like($history->[0], qr/backlog/);
 
 # assign issue 1
-change_state("1", "progress");
+assign_to("1", "baz");
 $issue = get_issue("1");
 is($issue->{"state"}, "progress");
 
@@ -54,7 +54,7 @@ is($issue->{"state"}, "progress");
 ok(get_progress());
 
 # wait issue 1
-change_state("1", "waiting");
+wait_on("1", "wait for bar to confirm new findings");
 $issue = get_issue("1");
 is($issue->{"state"}, "waiting");
 
@@ -62,7 +62,7 @@ is($issue->{"state"}, "waiting");
 ok(get_waiting());
 
 # complete issue 1
-change_state("1", "completed");
+complete("1");
 $issue = get_issue("1");
 is($issue->{"state"}, "completed");
 
