@@ -136,7 +136,7 @@ sub change_state {
 
 # parameter: none
 # returns: list_of issue_ids
-sub get_backlog   {
+sub get_backlog {
 	my $redis = db();
 	my $backlog = ();
 	foreach my $queue ($redis->keys("backlog:*")) {
