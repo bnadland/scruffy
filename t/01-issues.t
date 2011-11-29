@@ -60,4 +60,7 @@ change_state("1", "completed");
 $issue = get_issue("1");
 is($issue->{"state"}, "completed");
 
+# check if completed contains an issue
+ok(get_completed());
+
 done_testing();
