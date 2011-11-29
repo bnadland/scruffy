@@ -52,6 +52,9 @@ change_state("1", "waiting");
 $issue = get_issue("1");
 is($issue->{"state"}, "waiting");
 
+# check if waiting contains one issue
+ok(get_waiting());
+
 # complete issue 1
 change_state("1", "completed");
 $issue = get_issue("1");
