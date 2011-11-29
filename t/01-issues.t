@@ -8,6 +8,12 @@ Scruffy::Data::Issues::db()->flushdb();
 my $issue;
 my $history;
 
+# check that fields are empty
+ok(!get_backlog());
+ok(!get_progress());
+ok(!get_waiting());
+ok(!get_completed());
+
 # add an issue to the database
 ok(add_issue("foo", "bar"));
 
