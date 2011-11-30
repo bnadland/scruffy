@@ -29,7 +29,7 @@ sub history {
 
 	my $redis = db();
 
-	$redis->rpush("history:$issue_id", POSIX::strftime("%Y-%m-%d %H:%M", localtime)." ".$history);
+	$redis->rpush("history:$issue_id", POSIX::strftime("%Y-%m-%d %H:%M %z", localtime)." ".$history);
 };
 
 # returns: redis connection
