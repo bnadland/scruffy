@@ -63,7 +63,7 @@ sub add_issue {
 	my $id = $redis->incr("issues_id");
   $redis->hmset("issue:".$id, "description", $description, "created_by", $created_by, "priority", $priority, "state", "backlog");
   $redis->rpush("backlog:$priority", "$id");
-	history("$id", "added to backlog with $priority");
+	history("$id", "added to backlog with $priority priority");
 };
 
 # parameter: issue_id
@@ -156,7 +156,6 @@ sub complete {
 	my $redis = db();
 
 	change_state("$issue_id", "completed");
-	history("$issue_id", "completed");
 };
 
 # parameter: none
