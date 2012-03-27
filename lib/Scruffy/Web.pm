@@ -8,4 +8,24 @@ sub index {
 	$self->render();
 }
 
+sub add_issue {
+	...
+}
+
+sub backlog {
+	...
+}
+
+sub progress {
+  ...
+}
+
+sub waiting {
+  ...
+}
+
+sub completed {
+	...
+}
+
 1;

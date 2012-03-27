@@ -13,6 +13,11 @@ sub startup {
 
   # Normal route to controller
   $r->route('/')->to('web#index');
+	$r->route('/add')->to('web#add_issue');
+	$r->route('/backlog')->to('web#backlog');
+	$r->route('/progress')->to('web#progress');
+	$r->route('/waiting')->to('web#waiting');
+	$r->route('/completed')->to('web#completed');
 }
 
 1;
